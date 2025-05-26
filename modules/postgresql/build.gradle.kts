@@ -8,6 +8,7 @@ repositories {
 
 dependencies {
     api(project(":spring-testcontainers"))
+    implementation(platform(libs.spring.bom))
     implementation(libs.testcontainers.jdbc)
     implementation(libs.testcontainers.postgresql)
     testImplementation(platform(libs.junit.bom))

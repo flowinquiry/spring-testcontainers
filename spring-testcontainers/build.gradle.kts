@@ -7,6 +7,8 @@ plugins {
 }
 
 dependencies {
+    implementation(platform(libs.junit.bom))
+    implementation(platform(libs.spring.bom))
     implementation(libs.junit.jupiter.api)
     implementation(libs.junit.jupiter.engine)
     implementation(libs.junit.platform.launcher)
