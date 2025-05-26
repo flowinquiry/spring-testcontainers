@@ -8,7 +8,8 @@ testcontainers = "1.21.0"
 spotless = "7.0.3"
 logback = "1.5.18"
 slf4j = "2.0.17"
-spring-test = "6.2.7"
+spring = "6.2.7"
+spring-boot = "3.5.0"
 
 [libraries]
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit-jupiter" }
@@ -21,7 +22,12 @@ testcontainers-mysql = { group = "org.testcontainers", name = "mysql", version.r
 testcontainers-postgresql = { group = "org.testcontainers", name = "postgresql", version.ref = "testcontainers" }
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
-spring-test = { group = "org.springframework", name = "spring-test", version.ref = "spring-test" }
+spring-test = { group = "org.springframework", name = "spring-test", version.ref = "spring" }
+spring-context = { group = "org.springframework", name = "spring-context", version.ref = "spring" }
+spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-starter", version.ref = "spring-boot" }
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa", version.ref = "spring-boot" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "spring-boot" }
+spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure", version.ref = "spring-boot" }
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

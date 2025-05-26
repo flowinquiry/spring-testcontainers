@@ -1,10 +1,10 @@
 package io.flowinquiry.testcontainers.jdbc.mysql;
 
-import io.flowinquiry.testcontainers.jdbc.DefaultJdbcContainerProvider;
 import io.flowinquiry.testcontainers.jdbc.Rdbms;
+import io.flowinquiry.testcontainers.jdbc.SpringAwareJdbcContainerProvider;
 import org.testcontainers.containers.MySQLContainer;
 
-public class MySqlContainerProvider extends DefaultJdbcContainerProvider {
+public class MySqlContainerProvider extends SpringAwareJdbcContainerProvider {
 
   @Override
   public Rdbms getType() {

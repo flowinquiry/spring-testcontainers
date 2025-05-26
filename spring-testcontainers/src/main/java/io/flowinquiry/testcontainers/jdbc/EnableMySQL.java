@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @EnableJdbcContainer(rdbms = Rdbms.MYSQL)
 public @interface EnableMySQL {
   String version() default "8.0.32";
+
   String dockerImage() default "mysql";
 }

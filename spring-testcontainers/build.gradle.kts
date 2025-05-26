@@ -12,4 +12,5 @@ dependencies {
     implementation(libs.junit.platform.launcher)
     implementation(libs.testcontainers.jdbc)
     implementation(libs.spring.test)
+    implementation(libs.spring.context)
 }

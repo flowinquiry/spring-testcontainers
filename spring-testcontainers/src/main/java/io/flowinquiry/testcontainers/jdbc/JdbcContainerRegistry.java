@@ -1,25 +1,36 @@
 package io.flowinquiry.testcontainers.jdbc;
 
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class JdbcContainerRegistry {
 
-  private static JdbcDatabaseContainer<?> container;
+  private static final Map<Class<?>, JdbcContainerProvider> providers = new ConcurrentHashMap<>();
 
   private JdbcContainerRegistry() {}
 
-  public static void setContainer(JdbcDatabaseContainer<?> c) {
-    container = c;
+  /** Associates a test class with its corresponding JDBC container provider. */
+  public static void set(Class<?> testClass, JdbcContainerProvider provider) {
+    providers.put(testClass, provider);
   }
 
-  public static JdbcDatabaseContainer<?> getContainer() {
-    if (container == null) {
-      throw new IllegalStateException("JDBC container has not been initialized");
-    }
-    return container;
+  /** Retrieves the provider associated with the given test class. */
+  public static JdbcContainerProvider get(Class<?> testClass) {
+    return providers.get(testClass);
   }
 
-  public static boolean isInitialized() {
-    return container != null;
+  /** Checks if a provider has already been registered for the given test class. */
+  public static boolean contains(Class<?> testClass) {
+    return providers.containsKey(testClass);
+  }
+
+  /** Clears the provider for a given test class (optional cleanup). */
+  public static void clear(Class<?> testClass) {
+    providers.remove(testClass);
+  }
+
+  /** Clears all entries — useful in testing or teardown hooks. */
+  public static void clearAll() {
+    providers.clear();
   }
 }

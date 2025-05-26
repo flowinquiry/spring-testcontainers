@@ -12,64 +12,82 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
 
   @Override
   public void beforeAll(ExtensionContext context) {
-    EnableJdbcContainer enableJdbcContainer =
-        findEnableJdbcContainer(context.getRequiredTestClass());
-    if (enableJdbcContainer == null) return;
+    Class<?> testClass = context.getRequiredTestClass();
+    EnableJdbcContainer config = resolveJdbcConfig(testClass);
 
-    provider = JdbcContainerProviderFactory.getProvider(enableJdbcContainer);
+    if (config == null) return;
+
+    this.provider = JdbcContainerProviderFactory.getProvider(config);
     provider.start();
+
+    JdbcContainerRegistry.set(testClass, provider);
   }
 
   @Override
   public void afterAll(ExtensionContext context) {
-    provider.stop();
+    if (provider != null) {
+      provider.stop();
+      JdbcContainerRegistry.clear(context.getRequiredTestClass());
+    }
   }
 
-  private EnableJdbcContainer findEnableJdbcContainer(Class<?> testClass) {
-    // Reject direct use
+  private EnableJdbcContainer resolveJdbcConfig(Class<?> testClass) {
     if (testClass.isAnnotationPresent(EnableJdbcContainer.class)) {
       throw new IllegalStateException(
-          "@EnableJdbcContainer should not be used directly. Use @EnablePostgreSQL, @EnableMySQL, etc.");
+          """
+                @EnableJdbcContainer is a meta-annotation and should not be used directly.
+                Use @EnablePostgreSQL, @EnableMySQL, etc. instead.
+            """);
     }
 
-    // 2. Check meta-annotations
     for (Annotation annotation : testClass.getAnnotations()) {
-      EnableJdbcContainer meta =
+      EnableJdbcContainer metaAnnotation =
           annotation.annotationType().getAnnotation(EnableJdbcContainer.class);
-      if (meta != null) {
-        try {
-          Method versionMethod = annotation.annotationType().getMethod("version");
-          String version = (String) versionMethod.invoke(annotation);
-          String dockerImage =
-              (String) annotation.annotationType().getMethod("dockerImage").invoke(annotation);
 
-          return new EnableJdbcContainer() {
-            @Override
-            public Rdbms rdbms() {
-              return meta.rdbms();
-            }
-
-            @Override
-            public String version() {
-              return version;
-            }
-
-            @Override
-            public String dockerImage() {
-              return dockerImage;
-            }
-
-            @Override
-            public Class<? extends Annotation> annotationType() {
-              return EnableJdbcContainer.class;
-            }
-          };
-        } catch (Exception e) {
-          throw new RuntimeException("Failed to extract version from meta-annotation", e);
-        }
+      if (metaAnnotation != null) {
+        return buildResolvedJdbcConfig(annotation, metaAnnotation);
       }
     }
 
     return null;
+  }
+
+  private EnableJdbcContainer buildResolvedJdbcConfig(
+      Annotation sourceAnnotation, EnableJdbcContainer meta) {
+    try {
+      Method versionMethod = sourceAnnotation.annotationType().getMethod("version");
+      Method imageMethod = sourceAnnotation.annotationType().getMethod("dockerImage");
+
+      String version = (String) versionMethod.invoke(sourceAnnotation);
+      String dockerImage = (String) imageMethod.invoke(sourceAnnotation);
+
+      return new EnableJdbcContainer() {
+        @Override
+        public Rdbms rdbms() {
+          return meta.rdbms();
+        }
+
+        @Override
+        public String version() {
+          return version;
+        }
+
+        @Override
+        public String dockerImage() {
+          return dockerImage;
+        }
+
+        @Override
+        public Class<? extends Annotation> annotationType() {
+          return EnableJdbcContainer.class;
+        }
+      };
+
+    } catch (ReflectiveOperationException e) {
+      throw new IllegalStateException(
+          "Failed to extract JDBC container config from annotation: "
+              + sourceAnnotation.annotationType().getName(),
+          e);
+    }
   }
 }

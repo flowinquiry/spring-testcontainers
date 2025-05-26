@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @EnableJdbcContainer(rdbms = Rdbms.POSTGRESQL)
 public @interface EnablePostgreSQL {
   String version() default "16.3";
+
   String dockerImage() default "postgres";
 }
