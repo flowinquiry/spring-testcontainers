@@ -56,8 +56,7 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
 
     for (Annotation annotation : testClass.getAnnotations()) {
       Annotation jdbcAnnotation =
-          findDirectAnnotationAnnotatedWith(
-              annotation.annotationType(), EnableJdbcContainer.class, new HashSet<>());
+          findNearestAnnotationWith(annotation, EnableJdbcContainer.class, new HashSet<>());
       if (jdbcAnnotation != null) {
         EnableJdbcContainer meta =
             jdbcAnnotation.annotationType().getAnnotation(EnableJdbcContainer.class);
@@ -68,23 +67,21 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
     return null;
   }
 
-  private Annotation findDirectAnnotationAnnotatedWith(
-      Class<? extends Annotation> annotationType,
-      Class<? extends Annotation> target,
-      Set<Class<?>> visited) {
-    if (!visited.add(annotationType)) return null;
+  private Annotation findNearestAnnotationWith(
+      Annotation candidate, Class<? extends Annotation> target, Set<Class<?>> visited) {
+    Class<? extends Annotation> candidateType = candidate.annotationType();
+    if (!visited.add(candidateType)) return null;
 
-    for (Annotation meta : annotationType.getAnnotations()) {
-      Class<? extends Annotation> metaType = meta.annotationType();
+    // ✅ Check if the annotation itself has the target meta-annotation
+    if (candidateType.isAnnotationPresent(target)) {
+      return candidate;
+    }
 
-      if (metaType.equals(target)) {
-        // Found an annotation directly annotated with @EnableJdbcContainer
-        return annotationType.getAnnotation(metaType);
-      }
-
-      Annotation deeper = findDirectAnnotationAnnotatedWith(metaType, target, visited);
-      if (deeper != null && metaType.isAnnotationPresent(target)) {
-        return meta;
+    // 🔁 Recurse through meta-annotations
+    for (Annotation meta : candidateType.getAnnotations()) {
+      Annotation result = findNearestAnnotationWith(meta, target, visited);
+      if (result != null) {
+        return result; // propagate up the nearest match
       }
     }
 
