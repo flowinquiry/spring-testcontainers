@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * @see JdbcExtension
  * @see Rdbms#MYSQL
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @EnableJdbcContainer(rdbms = Rdbms.MYSQL)

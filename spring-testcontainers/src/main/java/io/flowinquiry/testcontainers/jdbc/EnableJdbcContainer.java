@@ -48,7 +48,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * @see EnablePostgreSQL
  * @see EnableMySQL
  */
-@Target({ElementType.TYPE})
+@Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @ExtendWith(JdbcExtension.class)

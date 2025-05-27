@@ -41,7 +41,7 @@ import java.lang.annotation.Target;
  * @see JdbcExtension
  * @see Rdbms#POSTGRESQL
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @EnableJdbcContainer(rdbms = Rdbms.POSTGRESQL)
