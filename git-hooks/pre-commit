@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "Running spotlessApply to format code before commit..."
+./gradlew spotlessApply
+
+# Check if spotlessApply succeeded
+if [ $? -ne 0 ]; then
+  echo "Error: spotlessApply failed. Please fix the issues and try again."
+  exit 1
+fi
+
+# Add the formatted files back to the staging area
+git add -u
+
+echo "Code formatting completed successfully."
