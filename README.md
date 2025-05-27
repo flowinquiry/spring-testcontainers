@@ -86,6 +86,7 @@ class PostgresSpringTest {
 import io.flowinquiry.testcontainers.jdbc.EnablePostgreSQL;
 import org.junit.jupiter.api.Test;
 
+@ExtendWith(SpringExtension.class)
 @EnablePostgreSQL
 class PostgresTest {
 
@@ -242,7 +243,7 @@ The project includes several example modules demonstrating how to use Spring-Tes
 
 * Manual configuration for container-based testing
 
-These examples provide a good starting point for integrating TestContainers-Ext into your own projects.
+These examples provide a good starting point for integrating Spring-TestContainers into your own projects.
 
 ## Contributing
 
