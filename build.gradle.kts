@@ -28,19 +28,21 @@ subprojects {
         }
     }
 
-    plugins.withId("java-library") {
-        apply(plugin = "maven-publish")
-        group = "io.flowinquiry"
+    if (!project.path.startsWith(":examples")) {
+        plugins.withId("java-library") {
+            apply(plugin = "maven-publish")
+            group = "io.flowinquiry.testcontainers"
 
-        extensions.configure<PublishingExtension>("publishing") {
-            publications {
-                create<MavenPublication>("mavenJava") {
-                    from(components["java"])
+            extensions.configure<PublishingExtension>("publishing") {
+                publications {
+                    create<MavenPublication>("mavenJava") {
+                        from(components["java"])
+                    }
                 }
-            }
 
-            repositories {
-                mavenLocal()
+                repositories {
+                    mavenLocal()
+                }
             }
         }
     }
