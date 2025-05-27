@@ -10,6 +10,7 @@ slf4j = "2.0.17"
 spring = "6.2.7"
 spring-boot = "3.5.0"
 spring-dependency-management="1.1.7"
+postgresql = "42.7.2"
 
 [libraries]
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit-jupiter" }
@@ -30,6 +31,7 @@ spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
+postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

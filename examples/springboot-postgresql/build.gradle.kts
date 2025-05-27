@@ -20,7 +20,7 @@ dependencies {
     implementation(libs.spring.boot.starter)
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.autoconfigure)
-    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly(libs.postgresql)
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.platform.launcher)
