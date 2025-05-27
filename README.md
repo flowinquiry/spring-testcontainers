@@ -1,78 +1,99 @@
-# TestContainers-Ext
+# Spring-TestContainers
 
-A Java library that simplifies integration testing with databases by automating TestContainers setup and lifecycle management.
+Spring-TestContainers is a Java library that simplifies database integration testing by automating Testcontainers setup and lifecycle management—seamlessly integrated with Spring and Spring Boot.
 
-## Overview
+## Why Spring-TestContainers?
 
-TestContainers-Ext addresses a common pain point in integration testing: the repetitive boilerplate code needed to set up, manage, and tear down test containers. Instead of manually initializing TestContainer instances in every test class and handling their lifecycle, this library provides a simple annotation-based approach that handles all the container management for you.
+Setting up Testcontainers in Spring-based projects often involves boilerplate code and manual configuration. Spring-TestContainers eliminates that overhead with a clean, annotation-driven approach that:
 
-## Comparison: TestContainers vs TestContainers-Ext
+* Reduces setup to a single annotation (@EnablePostgreSQL, @EnableMySQL, etc.)
 
-The following table demonstrates the difference between using TestContainers directly and using TestContainers-Ext:
+* Automatically manages container lifecycle
 
-| Feature | Using TestContainers Directly | Using TestContainers-Ext |
-|---------|------------------------------|--------------------------|
-| **Setup** | Requires manual container initialization and configuration | Simple annotation-based setup |
-| **Code Example** | See Example 1 below | See Example 2 below |
-| **Lines of Code** | ~25 lines | ~5 lines |
-| **Container Lifecycle** | Manual start/stop | Automatic management |
-| **Configuration** | Manual configuration of database properties | Handled automatically |
-| **Maintenance** | More code to maintain | Minimal code |
-| **Focus** | Split between infrastructure and test logic | Primarily on test logic |
-| **Learning Curve** | Need to understand TestContainers API details | Simple annotation-based API |
+* Auto-configures Spring environment with database connection details
 
-### Example 1: Using TestContainers Directly
+## Comparison: TestContainers with Spring vs Spring-TestContainers
+
+The following table demonstrates the difference between using TestContainers with Spring directly and using Spring-TestContainers:
+
+| Feature | Plain TestContainers with Spring                                  | Spring-TestContainers |
+|---------|-------------------------------------------------------------------|------------------------|
+| **Setup** | Manual container and Spring config	 | Single annotation |
+| **Boilerplate** | ~50 lines                                                         | ~5 lines |
+| **Container Lifecycle** | Manual or via JUnit extension                       | Automatic |
+| **Spring Environment** | Manually wired                              | Auto-configured |
+| **Maintenance** | More code to maintain                                             | Minimal code |
+| **Focus** | 	Infrastructure + test logic                       | Pure test logic |
+| **Learning Curve** | High           | Low |
+
+### Example 1: Traditional Testcontainers Setup
 
 ```java
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-public class PostgresTest {
+import javax.sql.DataSource;
 
-    private static PostgreSQLContainer<?> postgres;
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = PostgresSpringTest.TestConfig.class)
+@Testcontainers
+class PostgresSpringTest {
 
-    @BeforeAll
-    public static void startContainer() {
-        postgres = new PostgreSQLContainer<>("postgres:13.2")
+    @Container
+    private static final PostgreSQLContainer<?> postgres = 
+        new PostgreSQLContainer<>("postgres:16.3")
             .withDatabaseName("test")
             .withUsername("test")
             .withPassword("test");
-        postgres.start();
 
-        // Configure your application to use the container
-        System.setProperty("DB_URL", postgres.getJdbcUrl());
-        System.setProperty("DB_USERNAME", postgres.getUsername());
-        System.setProperty("DB_PASSWORD", postgres.getPassword());
-    }
+    @Autowired
+    private DataSource dataSource;
 
     @Test
-    public void testDatabaseConnection() {
-        // Your test code here
+    void testDatabaseConnection() {
+        // Your test code here using the dataSource
+        // The container is automatically started by the @Testcontainers annotation
+        // and the dataSource is configured to connect to it
     }
 
-    @AfterAll
-    public static void stopContainer() {
-        if (postgres != null) {
-            postgres.stop();
+    @Configuration
+    static class TestConfig {
+        @Bean
+        public DataSource dataSource() {
+            DriverManagerDataSource dataSource = new DriverManagerDataSource();
+            dataSource.setDriverClassName("org.postgresql.Driver");
+            dataSource.setUrl(postgres.getJdbcUrl());
+            dataSource.setUsername(postgres.getUsername());
+            dataSource.setPassword(postgres.getPassword());
+            return dataSource;
         }
     }
 }
 ```
 
-### Example 2: Using TestContainers-Ext
+### Example 2: Using Spring-TestContainers
 
 ```java
-import io.flowinquiry.testcontainers.jdbc.EnableJdbcContainer;
-import io.flowinquiry.testcontainers.jdbc.Rdbms;
+import io.flowinquiry.testcontainers.jdbc.EnablePostgreSQL;
 import org.junit.jupiter.api.Test;
 
-@EnableJdbcContainer(rdbms = Rdbms.POSTGRES, version = "13.2")
-public class PostgresTest {
+@EnablePostgreSQL
+class PostgresTest {
+
+    @Autowired
+    private DataSource dataSource;
 
     @Test
-    public void testDatabaseConnection() {
+    void testDatabaseConnection() {
         // Your test code here
         // Container is automatically started and stopped
     }
@@ -81,31 +102,43 @@ public class PostgresTest {
 
 ## Features
 
-- **Simple Annotation API**: Just add `@EnableJdbcContainer` to your test class
-- **Automatic Container Management**: No need to manually start/stop containers
-- **JUnit 5 Integration**: Works seamlessly with JUnit 5 tests
-- **Multiple Database Support**: Currently supports PostgreSQL and MySQL
-- **Extensible Architecture**: Easy to add support for additional databases
+* 🧩 Simple annotation API: @EnablePostgreSQL, @EnableMySQL
+
+* 🔄 Automatic container lifecycle management
+
+* 🧪 JUnit 5 integration
+
+* 🌱 Full Spring and Spring Boot support
+
+* 🧰 Extensible architecture for other databases
+
+* 🐘 Out-of-the-box support for PostgreSQL and MySQL
 
 ## Requirements
 
-- Java 8 or higher
+- Java 17 or higher
 - JUnit 5
 - Docker (for running the containers)
+- Spring Framework 6.x (for Spring integration)
+- Spring Boot 3.x (for Spring Boot integration)
 
 ## Installation
 
-Add the following dependencies to your build file:
+Add the core library along with the database module(s) you plan to use. Each database has its own module, which includes everything needed to support that specific container and configuration.
 
 ### Gradle (Kotlin DSL)
 
 ```kotlin
 // Core library
-implementation("org.hng:testcontainers-ext-core:1.0.0")
+testImplementation("io.flowinquiry:spring-testcontainers:0.9.0")
 
-// Database-specific modules (add only what you need)
-implementation("org.hng:testcontainers-ext-mysql:1.0.0")  // For MySQL support
-implementation("org.hng:testcontainers-ext-postgres:1.0.0")  // For PostgreSQL support
+// Add one or more of the following database modules
+testImplementation("io.flowinquiry:modules-postgresql:0.9.0") // PostgreSQL support
+testImplementation("io.flowinquiry:modules-mysql:0.9.0")      // MySQL support
+
+// Corresponding TestContainers dependencies
+testImplementation("org.testcontainers:postgresql:1.21.0")
+testImplementation("org.testcontainers:mysql:1.21.0")
 ```
 
 ### Maven
@@ -113,61 +146,75 @@ implementation("org.hng:testcontainers-ext-postgres:1.0.0")  // For PostgreSQL s
 ```xml
 <!-- Core library -->
 <dependency>
-    <groupId>org.hng</groupId>
-    <artifactId>testcontainers-ext-core</artifactId>
-    <version>1.0.0</version>
+    <groupId>io.flowinquiry</groupId>
+    <artifactId>spring-testcontainers</artifactId>
+    <version>0.9.0</version>
     <scope>test</scope>
 </dependency>
 
-<!-- Database-specific modules (add only what you need) -->
+<!-- Add one or more of the following database modules -->
 <dependency>
-    <groupId>org.hng</groupId>
-    <artifactId>testcontainers-ext-mysql</artifactId>
-    <version>1.0.0</version>
+    <groupId>io.flowinquiry</groupId>
+    <artifactId>modules-postgresql</artifactId>
+    <version>0.9.0</version>
     <scope>test</scope>
 </dependency>
 <dependency>
-    <groupId>org.hng</groupId>
-    <artifactId>testcontainers-ext-postgres</artifactId>
-    <version>1.0.0</version>
+
+<groupId>io.flowinquiry</groupId>
+    <artifactId>modules-mysql</artifactId>
+    <version>0.9.0</version>
     <scope>test</scope>
 </dependency>
+
+<!-- TestContainers dependencies -->
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>1.21.0</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>mysql</artifactId>
+    <version>1.21.0</version>
+    <scope>test</scope>
+</dependency>
+
 ```
+
+> 📝 As more databases are supported, simply add the corresponding module and TestContainers dependency.
 
 ## Usage
 
-### Basic Example
+### Spring Framework Integration
 
 ```java
-import io.flowinquiry.testcontainers.jdbc.EnableJdbcContainer;
-import io.flowinquiry.testcontainers.jdbc.Rdbms;
-import org.junit.jupiter.api.Test;
-
-@EnableJdbcContainer(rdbms = Rdbms.POSTGRES, version = "13.2")
-public class MyDatabaseTest {
+// Spring Framework (without Spring Boot)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = YourSpringConfig.class)
+@EnablePostgreSQL
+class SpringPostgresTest {
+    @Autowired
+    private YourRepository repository;
 
     @Test
-    public void testDatabaseConnection() {
-        // Your test code here
-        // The database container is automatically started before the test
-        // and stopped after the test
+    void testWithSpring() {
+        // Spring environment is auto-configured with container details
     }
 }
-```
 
-### MySQL Example
-
-```java
-import io.flowinquiry.testcontainers.jdbc.EnableJdbcContainer;
-import io.flowinquiry.testcontainers.jdbc.Rdbms;
-import org.junit.jupiter.api.Test;
-
-@EnableJdbcContainer(rdbms = Rdbms.MYSQL, version = "8.0")
-public class MySqlTest {
+// Spring Boot
+@SpringBootTest
+@EnablePostgreSQL
+class SpringBootPostgresTest {
+    @Autowired
+    private YourRepository repository;
 
     @Test
-    public void testWithMySql() {
-        // Your MySQL-specific test code here
+    void testWithSpringBoot() {
+        // Spring Boot is auto-configured with container details
     }
 }
 ```
@@ -179,15 +226,23 @@ Currently, the following databases are supported:
 - PostgreSQL
 - MySQL
 
-## How It Works
+## Examples
 
-TestContainers-Ext uses JUnit 5's extension mechanism to automatically manage the lifecycle of database containers. When a test class is annotated with `@EnableJdbcContainer`, the library:
+The project includes several example modules demonstrating how to use Spring-TestContainers:
 
-1. Identifies the requested database type and version
-2. Loads the appropriate container factory using Java's Service Provider Interface (SPI)
-3. Creates and starts the container before tests run
-4. Makes connection details available to tests
-5. Stops and removes the container after tests complete
+### [springboot-postgresql](examples/springboot-postgresql) / [springboot-mysql](examples/springboot-mysql)
+
+* Spring Boot applications using JPA with PostgreSQL and MySQL
+
+* Show how to integrate containerized databases with minimal configuration
+
+### [spring-postgresql](examples/spring-postgresql)
+
+* Spring Framework (no Boot) setup with JPA and PostgreSQL
+
+* Manual configuration for container-based testing
+
+These examples provide a good starting point for integrating TestContainers-Ext into your own projects.
 
 ## Contributing
 
@@ -198,22 +253,6 @@ Contributions are welcome! If you'd like to add support for additional databases
 3. Install the Git hooks to ensure code formatting (see below)
 4. Add your changes
 5. Submit a pull request
-
-### Git Hooks
-
-This project uses Git hooks to ensure code quality. We provide a pre-commit hook that automatically formats your code using the Spotless Gradle plugin before each commit.
-
-To install the Git hooks:
-
-```bash
-# Make the installation script executable (if not already)
-chmod +x git-hooks/install-hooks.sh
-
-# Run the installation script
-./git-hooks/install-hooks.sh
-```
-
-Once installed, the pre-commit hook will automatically run `./gradlew spotlessApply` before each commit, ensuring that all code is properly formatted.
 
 ## License
 

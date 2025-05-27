@@ -1,6 +1,8 @@
 package io.flowinquiry.testcontainers.jdbc;
 
 import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -40,6 +42,8 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
  * @see EnableMySQL
  */
 public abstract class SpringAwareJdbcContainerProvider implements JdbcContainerProvider {
+
+  private static final Logger log = LoggerFactory.getLogger(SpringAwareJdbcContainerProvider.class);
 
   /**
    * The TestContainers JDBC database container managed by this provider. This container is created
@@ -81,6 +85,7 @@ public abstract class SpringAwareJdbcContainerProvider implements JdbcContainerP
   void initContainerInstance(String dockerImage, String version) {
     this.version = version;
     this.dockerImage = dockerImage;
+    log.info("Initializing JDBC container with image {}:{}", dockerImage, version);
     jdbcDatabaseContainer = createJdbcDatabaseContainer();
   }
 
@@ -125,17 +130,6 @@ public abstract class SpringAwareJdbcContainerProvider implements JdbcContainerP
    * password as properties in the Spring environment, allowing Spring Boot applications to
    * automatically connect to the database container.
    *
-   * <p>The properties are added with the following keys:
-   *
-   * <ul>
-   *   <li>{@code spring.datasource.url} - The JDBC URL of the container
-   *   <li>{@code spring.datasource.username} - The username to use for connecting to the database
-   *   <li>{@code spring.datasource.password} - The password to use for connecting to the database
-   * </ul>
-   *
-   * <p>These properties are added to the environment with high priority (using {@code addFirst}),
-   * ensuring they override any existing properties with the same names.
-   *
    * @param environment the Spring environment to configure
    */
   void applyTo(ConfigurableEnvironment environment) {
@@ -143,6 +137,8 @@ public abstract class SpringAwareJdbcContainerProvider implements JdbcContainerP
     props.put("spring.datasource.url", jdbcDatabaseContainer.getJdbcUrl());
     props.put("spring.datasource.username", jdbcDatabaseContainer.getUsername());
     props.put("spring.datasource.password", jdbcDatabaseContainer.getPassword());
+
+    log.debug("Database container url: {}", jdbcDatabaseContainer.getJdbcUrl());
 
     environment
         .getPropertySources()
