@@ -9,6 +9,7 @@ logback = "1.5.18"
 slf4j = "2.0.17"
 spring = "6.2.7"
 spring-boot = "3.5.0"
+spring-dependency-management="1.1.7"
 
 [libraries]
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit-jupiter" }
@@ -31,4 +32,6 @@ spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 
 [plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref="spring-dependency-management" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

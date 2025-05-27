@@ -7,8 +7,8 @@
         </encoder>
     </appender>
 
-    <!-- 2) DEBUG for just your package -->
-    <logger name="io.flowinquiry" level="DEBUG">
+    <!-- 2) DEBUG for just your package (disable appender inheritance) -->
+    <logger name="io.flowinquiry" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
@@ -18,3 +18,4 @@
     </root>
 
 </configuration>
+

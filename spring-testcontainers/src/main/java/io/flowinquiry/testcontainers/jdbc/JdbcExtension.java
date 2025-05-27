@@ -5,8 +5,12 @@ import java.lang.reflect.Method;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
+
+  private static final Logger log = LoggerFactory.getLogger(JdbcExtension.class);
 
   private JdbcContainerProvider provider;
 
@@ -17,10 +21,17 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
 
     if (config == null) return;
 
-    this.provider = JdbcContainerProviderFactory.getProvider(config);
-    provider.start();
-
-    JdbcContainerRegistry.set(testClass, provider);
+    // Check if a provider is already registered for this test class
+    if (JdbcContainerRegistry.contains(testClass)) {
+      // Provider already exists, use it
+      this.provider = JdbcContainerRegistry.get(testClass);
+    } else {
+      // Create and start a new provider
+      this.provider = JdbcContainerProviderFactory.getProvider(config);
+      log.debug("Starting JDBC container {} for test class: {}", provider, testClass.getName());
+      provider.start();
+      JdbcContainerRegistry.set(testClass, provider);
+    }
   }
 
   @Override
@@ -28,6 +39,10 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
     if (provider != null) {
       provider.stop();
       JdbcContainerRegistry.clear(context.getRequiredTestClass());
+      log.debug(
+          "Stopped JDBC container {} for test class: {}",
+          provider,
+          context.getRequiredTestClass().getName());
     }
   }
 
