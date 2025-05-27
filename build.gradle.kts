@@ -33,7 +33,7 @@ subprojects {
     }
 
     if (!project.path.startsWith(":examples")) {
-        plugins.withId("java-library") {
+        plugins.withId("buildlogic.java-library-conventions") {
             apply(plugin = "maven-publish")
             group = "io.flowinquiry.testcontainers"
 

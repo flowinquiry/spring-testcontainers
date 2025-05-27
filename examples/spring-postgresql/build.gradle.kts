@@ -1,6 +1,5 @@
 plugins {
-    id("java-library")
-    id("application")
+    id("buildlogic.java-application-conventions")
     alias(libs.plugins.spring.dependency.management)
 }
 
@@ -9,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":spring-testcontainers"))
+    implementation(project(":spring-testcontainers"))
     implementation(project(":modules:postgresql"))
     implementation(platform(libs.spring.bom))
     implementation(libs.testcontainers.jdbc)
