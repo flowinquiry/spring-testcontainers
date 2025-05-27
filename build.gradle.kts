@@ -33,10 +33,17 @@ subprojects {
             apply(plugin = "maven-publish")
             group = "io.flowinquiry.testcontainers"
 
+            // Create a sources JAR
+            val sourcesJar by tasks.registering(Jar::class) {
+                archiveClassifier.set("sources")
+                from(project.the<SourceSetContainer>()["main"].allSource)
+            }
+
             extensions.configure<PublishingExtension>("publishing") {
                 publications {
                     create<MavenPublication>("mavenJava") {
                         from(components["java"])
+                        artifact(sourcesJar.get())
                     }
                 }
 

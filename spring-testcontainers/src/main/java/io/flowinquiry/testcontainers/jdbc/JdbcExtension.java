@@ -2,6 +2,8 @@ package io.flowinquiry.testcontainers.jdbc;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -21,12 +23,9 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
 
     if (config == null) return;
 
-    // Check if a provider is already registered for this test class
     if (JdbcContainerRegistry.contains(testClass)) {
-      // Provider already exists, use it
       this.provider = JdbcContainerRegistry.get(testClass);
     } else {
-      // Create and start a new provider
       this.provider = JdbcContainerProviderFactory.getProvider(config);
       log.debug("Starting JDBC container {} for test class: {}", provider, testClass.getName());
       provider.start();
@@ -50,17 +49,42 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
     if (testClass.isAnnotationPresent(EnableJdbcContainer.class)) {
       throw new IllegalStateException(
           """
-                @EnableJdbcContainer is a meta-annotation and should not be used directly.
-                Use @EnablePostgreSQL, @EnableMySQL, etc. instead.
-            """);
+        @EnableJdbcContainer is a meta-annotation and should not be used directly.
+        Use @EnablePostgreSQL, @EnableMySQL, etc. instead.
+    """);
     }
 
     for (Annotation annotation : testClass.getAnnotations()) {
-      EnableJdbcContainer metaAnnotation =
-          annotation.annotationType().getAnnotation(EnableJdbcContainer.class);
+      Annotation jdbcAnnotation =
+          findDirectAnnotationAnnotatedWith(
+              annotation.annotationType(), EnableJdbcContainer.class, new HashSet<>());
+      if (jdbcAnnotation != null) {
+        EnableJdbcContainer meta =
+            jdbcAnnotation.annotationType().getAnnotation(EnableJdbcContainer.class);
+        return buildResolvedJdbcConfig(jdbcAnnotation, meta);
+      }
+    }
 
-      if (metaAnnotation != null) {
-        return buildResolvedJdbcConfig(annotation, metaAnnotation);
+    return null;
+  }
+
+  private Annotation findDirectAnnotationAnnotatedWith(
+      Class<? extends Annotation> annotationType,
+      Class<? extends Annotation> target,
+      Set<Class<?>> visited) {
+    if (!visited.add(annotationType)) return null;
+
+    for (Annotation meta : annotationType.getAnnotations()) {
+      Class<? extends Annotation> metaType = meta.annotationType();
+
+      if (metaType.equals(target)) {
+        // Found an annotation directly annotated with @EnableJdbcContainer
+        return annotationType.getAnnotation(metaType);
+      }
+
+      Annotation deeper = findDirectAnnotationAnnotatedWith(metaType, target, visited);
+      if (deeper != null && metaType.isAnnotationPresent(target)) {
+        return meta;
       }
     }
 
