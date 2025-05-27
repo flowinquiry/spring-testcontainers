@@ -130,11 +130,11 @@ Add the core library along with the database module(s) you plan to use. Each dat
 
 ```kotlin
 // Core library
-testImplementation("io.flowinquiry.testcontainer:spring-testcontainers:0.9.0")
+testImplementation("io.flowinquiry.testcontainers:spring-testcontainers:0.9.0")
 
 // Add one or more of the following database modules
-testImplementation("io.flowinquiry.testcontainer:postgresql:0.9.0") // PostgreSQL support
-testImplementation("io.flowinquiry.testcontainer:mysql:0.9.0")      // MySQL support
+testImplementation("io.flowinquiry.testcontainers:postgresql:0.9.0") // PostgreSQL support
+testImplementation("io.flowinquiry.testcontainers:mysql:0.9.0")      // MySQL support
 
 // Corresponding TestContainers dependencies
 testImplementation("org.testcontainers:postgresql:1.21.0")
@@ -146,7 +146,7 @@ testImplementation("org.testcontainers:mysql:1.21.0")
 ```xml
 <!-- Core library -->
 <dependency>
-    <groupId>io.flowinquiry.testcontainer</groupId>
+    <groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>spring-testcontainers</artifactId>
     <version>0.9.0</version>
     <scope>test</scope>
@@ -154,14 +154,14 @@ testImplementation("org.testcontainers:mysql:1.21.0")
 
 <!-- Add one or more of the following database modules -->
 <dependency>
-    <groupId>io.flowinquiry.testcontainer</groupId>
+    <groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>postgresql</artifactId>
     <version>0.9.0</version>
     <scope>test</scope>
 </dependency>
 <dependency>
 
-<groupId>io.flowinquiry.testcontainer</groupId>
+<groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>mysql</artifactId>
     <version>0.9.0</version>
     <scope>test</scope>
