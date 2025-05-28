@@ -43,11 +43,17 @@ subprojects {
                 from(project.the<SourceSetContainer>()["main"].allSource)
             }
 
+            val javadocJar by tasks.registering(Jar::class) {
+                archiveClassifier.set("javadoc")
+                from(tasks.named("javadoc"))
+            }
+
             extensions.configure<PublishingExtension>("publishing") {
                 publications {
                     create<MavenPublication>("mavenJava") {
                         from(components["java"])
                         artifact(sourcesJar.get())
+                        artifact(javadocJar.get())
 
                         pom {
                             name.set("Spring Test Containers")
@@ -81,7 +87,8 @@ subprojects {
                 repositories {
                     mavenLocal()
                     maven {
-                        url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+                        name = "staging"
+                        url = rootProject.layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
                     }
                 }
             }
