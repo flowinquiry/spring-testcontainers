@@ -42,13 +42,13 @@ public class PostgresqlDemoAppTest {
     List<Store> storesByName = storeRepository.findByName("Test Store");
     log.info("Found {} stores by name", storesByName.size());
     assertEquals(1, storesByName.size());
-    assertEquals("Test Store", storesByName.getFirst().getName());
+    assertEquals("Test Store", storesByName.get(0).getName());
 
     log.info("Testing findByDescriptionContaining");
     List<Store> storesByDescription = storeRepository.findByDescriptionContaining("demonstration");
     log.info("Found {} stores by description", storesByDescription.size());
     assertEquals(1, storesByDescription.size());
-    assertEquals("A test store for demonstration", storesByDescription.getFirst().getDescription());
+    assertEquals("A test store for demonstration", storesByDescription.get(0).getDescription());
 
     log.info("Creating another store");
     Store anotherStore =
