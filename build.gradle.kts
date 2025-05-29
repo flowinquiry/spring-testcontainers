@@ -139,6 +139,8 @@ val installGitHooks by tasks.registering {
 }
 
 // Automatically install Git hooks on project evaluation
-gradle.projectsEvaluated {
-    tasks.findByName("build")?.dependsOn("installGitHooks")
+if (System.getenv("CI") != "true") {
+    gradle.projectsEvaluated {
+        tasks.findByName("build")?.dependsOn("installGitHooks")
+    }
 }
