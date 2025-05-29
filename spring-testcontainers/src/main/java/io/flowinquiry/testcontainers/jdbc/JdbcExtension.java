@@ -12,26 +12,27 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A JUnit 5 extension that manages JDBC database containers for integration testing.
- * 
- * <p>This extension automatically starts and stops database containers based on annotations
- * present on the test class. It works with meta-annotations that are themselves annotated
- * with {@link EnableJdbcContainer}, such as {@code @EnablePostgreSQL}, {@code @EnableMySQL}, etc.
- * 
+ *
+ * <p>This extension automatically starts and stops database containers based on annotations present
+ * on the test class. It works with meta-annotations that are themselves annotated with {@link
+ * EnableJdbcContainer}, such as {@code @EnablePostgreSQL}, {@code @EnableMySQL}, etc.
+ *
  * <p>The extension handles the lifecycle of database containers:
+ *
  * <ul>
- *   <li>Before all tests: Detects database configuration from annotations and starts the appropriate container</li>
- *   <li>After all tests: Stops the container and cleans up resources</li>
+ *   <li>Before all tests: Detects database configuration from annotations and starts the
+ *       appropriate container
+ *   <li>After all tests: Stops the container and cleans up resources
  * </ul>
- * 
+ *
  * <p>Usage example:
- * <pre>
- * {@code
+ *
+ * <pre>{@code
  * @EnablePostgreSQL
  * class MyIntegrationTest {
  *     // Test methods that require a PostgreSQL database
  * }
- * }
- * </pre>
+ * }</pre>
  */
 public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
 
@@ -41,10 +42,10 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
 
   /**
    * Called before all tests in the current test class.
-   * 
-   * <p>This method detects the database configuration from annotations on the test class,
-   * creates the appropriate container provider, and starts the database container if needed.
-   * If a container for this test class is already running, it reuses the existing container.
+   *
+   * <p>This method detects the database configuration from annotations on the test class, creates
+   * the appropriate container provider, and starts the database container if needed. If a container
+   * for this test class is already running, it reuses the existing container.
    *
    * @param context the extension context for the test class
    */
@@ -67,9 +68,9 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
 
   /**
    * Called after all tests in the current test class have completed.
-   * 
-   * <p>This method stops the database container if it was started by this extension
-   * and removes the container reference from the registry to allow proper cleanup.
+   *
+   * <p>This method stops the database container if it was started by this extension and removes the
+   * container reference from the registry to allow proper cleanup.
    *
    * @param context the extension context for the test class
    */
@@ -129,11 +130,12 @@ public class JdbcExtension implements BeforeAllCallback, AfterAllCallback {
   }
 
   /**
-   * Builds a resolved JDBC container configuration from a source annotation and its meta-annotation.
-   * 
-   * <p>This method extracts configuration values (version and dockerImage) from the source annotation
-   * and combines them with the database type (rdbms) from the meta-annotation to create a complete
-   * {@link EnableJdbcContainer} configuration.
+   * Builds a resolved JDBC container configuration from a source annotation and its
+   * meta-annotation.
+   *
+   * <p>This method extracts configuration values (version and dockerImage) from the source
+   * annotation and combines them with the database type (rdbms) from the meta-annotation to create
+   * a complete {@link EnableJdbcContainer} configuration.
    *
    * @param sourceAnnotation the source annotation containing version and dockerImage values
    * @param meta the meta-annotation containing the database type (rdbms)

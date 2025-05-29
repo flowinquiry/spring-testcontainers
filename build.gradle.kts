@@ -113,3 +113,32 @@ jreleaser {
         }
     }
 }
+
+val installGitHooks by tasks.registering {
+    doLast {
+        val gitDir = File(rootDir, ".git")
+        val hooksDir = File(gitDir, "hooks")
+        val hookSource = File(rootDir, "scripts/git-hooks/pre-commit")
+        val hookTarget = File(hooksDir, "pre-commit")
+
+        if (!hookSource.exists()) {
+            println("No pre-commit script found at ${hookSource.path}. Skipping hook installation.")
+            return@doLast
+        }
+
+        if (!gitDir.exists()) {
+            println("Not a Git repository. Skipping Git hook installation.")
+            return@doLast
+        }
+
+        println("Installing Git pre-commit hook...")
+        hookSource.copyTo(hookTarget, overwrite = true)
+        hookTarget.setExecutable(true)
+        println("✅ Git hook installed at: ${hookTarget.path}")
+    }
+}
+
+// Automatically install Git hooks on project evaluation
+gradle.projectsEvaluated {
+    tasks.findByName("build")?.dependsOn("installGitHooks")
+}
