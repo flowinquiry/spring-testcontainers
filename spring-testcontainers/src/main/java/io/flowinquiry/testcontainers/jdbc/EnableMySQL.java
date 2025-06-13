@@ -1,49 +1,18 @@
 package io.flowinquiry.testcontainers.jdbc;
 
+import static io.flowinquiry.testcontainers.ContainerType.MYSQL;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Annotation for enabling MySQL database containers in tests.
- *
- * <p>When a test class is annotated with {@code @EnableMySQL}, a MySQL container will be
- * automatically started before the tests run and stopped after they complete.
- *
- * <p>Example usage:
- *
- * <pre>{@code
- * @SpringBootTest
- * @EnableMySQL
- * public class MyDatabaseTest {
- *     // Test methods...
- * }
- * }</pre>
- *
- * <p>You can customize the MySQL version and Docker image:
- *
- * <pre>{@code
- * @SpringBootTest
- * @EnableMySQL(version = "8.0.32", dockerImage = "mysql")
- * public class MyCustomMySQLTest {
- *     // Test methods...
- * }
- * }</pre>
- *
- * <p>When used with Spring Boot tests, the MySQL container's connection details will be
- * automatically configured in the Spring environment, making them available to your application and
- * tests.
- *
- * @see EnableJdbcContainer
- * @see JdbcExtension
- * @see Rdbms#MYSQL
- */
-@Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
+@Target({ANNOTATION_TYPE, TYPE})
+@Retention(RUNTIME)
 @Documented
-@EnableJdbcContainer(rdbms = Rdbms.MYSQL)
+@EnableJdbcContainer(rdbms = MYSQL)
 public @interface EnableMySQL {
   /**
    * Specifies the version of the MySQL Docker image to use.

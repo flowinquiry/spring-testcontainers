@@ -1,1 +1,1 @@
-org.springframework.test.context.ContextCustomizerFactory=io.flowinquiry.testcontainers.jdbc.JdbcContainerContextCustomizerFactory
+org.springframework.test.context.ContextCustomizerFactory=io.flowinquiry.testcontainers.ContainerContextCustomizerFactory

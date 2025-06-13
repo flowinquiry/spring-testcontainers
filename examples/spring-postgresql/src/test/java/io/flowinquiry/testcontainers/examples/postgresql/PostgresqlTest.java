@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PostgresqlConfig.class)
-@EnablePostgreSQL
+@EnablePostgreSQL(dockerImage = "postgres", version = "16.3")
 @ActiveProfiles("test")
 public class PostgresqlTest {
 

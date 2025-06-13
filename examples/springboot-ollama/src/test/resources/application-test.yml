@@ -1,0 +1,10 @@
+# Test-specific Ollama configuration
+# The base URL will be automatically set by the container
+
+# Logging for tests
+logging:
+  level:
+    root: INFO
+    org.springframework.ai: DEBUG
+    io.flowinquiry.testcontainers: DEBUG
+    org.testcontainers: INFO
