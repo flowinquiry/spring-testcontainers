@@ -79,7 +79,6 @@ public class OllamaContainerProvider
   @Override
   public void applyTo(ConfigurableEnvironment environment) {
     Properties props = new Properties();
-    props.put("spring.ai.ollama.base-url", container.getEndpoint());
     props.put("spring.ai.ollama.init.pull-model-strategy", "when_missing");
     props.put("spring.ai.ollama.chat.model", enableContainerAnnotation.model());
     props.put(
