@@ -8,7 +8,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":spring-testcontainers"))
     implementation(project(":modules:postgresql"))
     implementation(platform(libs.spring.bom))
     implementation(libs.testcontainers.jdbc)

@@ -1,6 +1,8 @@
 # Spring-TestContainers
 
-Spring-TestContainers is a Java library that simplifies database integration testing by automating Testcontainers setup and lifecycle management—seamlessly integrated with Spring and Spring Boot.
+Spring-TestContainers is a Java library that makes it easier to write integration tests with Testcontainers, especially when you're using Spring or Spring Boot. It handles the setup and lifecycle of containers for you, so you can focus on testing—not boilerplate.
+
+We originally built this for FlowInquiry to make our own testing smoother. It worked so well, we decided to share it as a standalone library so other teams can take advantage of it too.
 
 ## Why Spring-TestContainers?
 
@@ -11,6 +13,19 @@ Setting up Testcontainers in Spring-based projects often involves boilerplate co
 * Automatically manages container lifecycle
 
 * Auto-configures Spring environment with database connection details
+
+### Supported Containers
+
+Spring-TestContainers provides out-of-the-box support for the following containers. You can enable each one via a dedicated annotation in your test classes:
+
+Spring-TestContainers provides out-of-the-box support for the following containers. You can enable each one via a dedicated annotation in your test classes:
+
+| Container       | Annotation                        | Example Usage                                        | Notes                          |
+|----------------|-----------------------------------|-----------------------------------------------------|--------------------------------|
+| **PostgreSQL** | `@EnablePostgresContainer`        | `@EnablePostgresContainer(version = "15")`          | Uses `PostgreSQLContainer`     |
+| **MySQL**      | `@EnableMySQLContainer`           | `@EnableMySQLContainer(version = "8")`              | Uses `MySQLContainer`          |
+| **Ollama (AI)**| `@EnableOllamaContainer`          | `@EnableOllamaContainer(model = "llama2")`          | Starts Ollama with auto-pull   |
+
 
 ## Comparison: TestContainers with Spring vs Spring-TestContainers
 
@@ -103,7 +118,7 @@ class PostgresTest {
 
 ## Features
 
-* 🧩 Simple annotation API: @EnablePostgreSQL, @EnableMySQL
+* 🧩 Simple annotation API: @EnablePostgreSQL, @EnableMySQL, @EnableOllmaContainer
 
 * 🔄 Automatic container lifecycle management
 
@@ -130,30 +145,19 @@ Add the core library along with the database module(s) you plan to use. Each dat
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-// Core library
-testImplementation("io.flowinquiry.testcontainers:spring-testcontainers:0.9.0")
-
 // Add one or more of the following database modules
-testImplementation("io.flowinquiry.testcontainers:postgresql:0.9.0") // PostgreSQL support
-testImplementation("io.flowinquiry.testcontainers:mysql:0.9.0")      // MySQL support
-
-// Corresponding TestContainers dependencies
-testImplementation("org.testcontainers:postgresql:1.21.0")
-testImplementation("org.testcontainers:mysql:1.21.0")
+testImplementation("io.flowinquiry.testcontainers:postgresql:0.9.1") // PostgreSQL support
+testImplementation("io.flowinquiry.testcontainers:mysql:0.9.1")      // MySQL support
+testImplementation("io.flowinquiry.testcontainers:ollama:0.9.1")     // Ollama support 
 ```
 
 ### Maven
 
 ```xml
-<!-- Core library -->
-<dependency>
-    <groupId>io.flowinquiry.testcontainers</groupId>
-    <artifactId>spring-testcontainers</artifactId>
-    <version>0.9.0</version>
-    <scope>test</scope>
-</dependency>
 
 <!-- Add one or more of the following database modules -->
+
+<!-- Add this dependency to test Postgres database -->
 <dependency>
     <groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>postgresql</artifactId>
@@ -162,27 +166,21 @@ testImplementation("org.testcontainers:mysql:1.21.0")
 </dependency>
 <dependency>
 
-<groupId>io.flowinquiry.testcontainers</groupId>
-    <artifactId>mysql</artifactId>
-    <version>0.9.0</version>
-    <scope>test</scope>
-</dependency>
-
-<!-- TestContainers dependencies -->
+<!-- Add this dependency to test MySQL database -->
 <dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>postgresql</artifactId>
-    <version>1.21.0</version>
-    <scope>test</scope>
-</dependency>
-
-<dependency>
-    <groupId>org.testcontainers</groupId>
+    <groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>mysql</artifactId>
-    <version>1.21.0</version>
+    <version>0.9.1</version>
     <scope>test</scope>
 </dependency>
 
+<!-- Add this dependency to test Ollama container -->
+<dependency>
+    <groupId>io.flowinquiry.testcontainers</groupId>
+    <artifactId>ollama</artifactId>
+    <version>0.9.1</version>
+    <scope>test</scope>
+</dependency>
 ```
 
 > 📝 As more databases are supported, simply add the corresponding module and TestContainers dependency.
@@ -220,12 +218,13 @@ class SpringBootPostgresTest {
 }
 ```
 
-## Supported Databases
+## Supported Test Containers
 
-Currently, the following databases are supported:
+Currently, the following containers are supported:
 
 - PostgreSQL
 - MySQL
+- Ollama
 
 ## Examples
 
@@ -237,6 +236,7 @@ The project includes several example modules demonstrating how to use Spring-Tes
 
 * Show how to integrate containerized databases with minimal configuration
 
+
 ### [spring-postgresql](examples/spring-postgresql)
 
 * Spring Framework (no Boot) setup with JPA and PostgreSQL
@@ -244,6 +244,12 @@ The project includes several example modules demonstrating how to use Spring-Tes
 * Manual configuration for container-based testing
 
 These examples provide a good starting point for integrating Spring-TestContainers into your own projects.
+
+### [springboot-ollama](examples/springboot-ollama)
+
+* Spring Boot applications using Spring AI and Ollama
+
+* Show how to test AI prompts with Ollama container
 
 ## Contributing
 

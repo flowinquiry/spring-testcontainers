@@ -24,3 +24,5 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: test
+      env:
+        TESTCONTAINERS_REUSE_ENABLE: true
