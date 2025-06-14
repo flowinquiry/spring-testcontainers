@@ -16,10 +16,8 @@ import org.testcontainers.containers.GenericContainer;
 public abstract class ContainerLifecycleExtension<A extends Annotation>
     implements BeforeAllCallback, AfterAllCallback {
 
-  /** Logger for this class. */
   private static final Logger log = LoggerFactory.getLogger(ContainerLifecycleExtension.class);
 
-  /** The container provider that manages the actual container instance. */
   private SpringAwareContainerProvider<? extends Annotation, ? extends GenericContainer<?>>
       provider;
 
@@ -56,7 +54,7 @@ public abstract class ContainerLifecycleExtension<A extends Annotation>
       this.provider = ContainerRegistry.get(testClass);
     } else {
       this.provider = initProvider(enableContainerAnnotation);
-      log.debug("Starting JDBC container {} for test class: {}", provider, testClass.getName());
+      log.debug("Starting container {} for test class: {}", provider, testClass.getName());
       provider.start();
       ContainerRegistry.set(testClass, provider);
     }

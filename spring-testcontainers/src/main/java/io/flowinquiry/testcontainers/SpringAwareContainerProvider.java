@@ -15,7 +15,7 @@ import org.testcontainers.utility.TestcontainersConfiguration;
  * well as applying container configuration to Spring environment.
  *
  * <p>Implementations of this class should provide specific container creation logic and environment
- * configuration for different container types (e.g., PostgreSQL, MySQL, Ollama).
+ * configuration for different container types (e.g., PostgreSQL, MySQL, Ollama, etc).
  *
  * @param <SELF> The specific type of GenericContainer being managed
  */
