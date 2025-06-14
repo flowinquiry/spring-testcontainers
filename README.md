@@ -257,9 +257,8 @@ Contributions are welcome! If you'd like to add support for additional databases
 
 1. Fork the repository
 2. Create a feature branch
-3. Install the Git hooks to ensure code formatting (see below)
-4. Add your changes
-5. Submit a pull request
+3. Add your changes
+4. Submit a pull request
 
 ## License
 
