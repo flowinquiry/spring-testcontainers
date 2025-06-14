@@ -16,10 +16,6 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="org.springframework.boot.autoconfigure" level="DEBUG" additivity="false">
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
     <!-- 3) INFO for everything else -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

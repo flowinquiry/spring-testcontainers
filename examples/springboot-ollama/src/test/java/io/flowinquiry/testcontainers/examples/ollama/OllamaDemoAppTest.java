@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableOllamaContainer(
     dockerImage = "ollama/ollama",
-    version = "0.1.26",
+    version = "0.9.0",
     model = "smollm2:135m",
     options = @OllamaOptions(temperature = "0.7", topP = "0.5"))
 @ActiveProfiles("test")
