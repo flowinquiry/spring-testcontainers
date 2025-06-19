@@ -2,6 +2,7 @@
 
 [![Build Status](https://github.com/flowinquiry/spring-testcontainers/actions/workflows/gradle.yml/badge.svg)](https://github.com/flowinquiry/spring-testcontainers/actions/workflows/gradle.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/io.flowinquiry.testcontainers/spring-testcontainers?label=Maven%20Central)](https://search.maven.org/artifact/io.flowinquiry.testcontainers/spring-testcontainers)
+[![Docs](https://img.shields.io/badge/docs-view-blue)](https://spring-testcontainers.flowinquiry.io)
 
 Spring-TestContainers is a Java library that makes it easier to write integration tests with Testcontainers, especially when you're using Spring or Spring Boot. It handles the setup and lifecycle of containers for you, so you can focus on testing—not boilerplate.
 
@@ -228,6 +229,10 @@ Currently, the following containers are supported:
 - PostgreSQL
 - MySQL
 - Ollama
+
+## Documentation
+
+See the [documentation](https://spring-testcontainers.flowinquiry.io) for detailed instructions on how to use Spring TestContainers annotations and how to extend the library with your own custom modules.
 
 ## Examples
 
