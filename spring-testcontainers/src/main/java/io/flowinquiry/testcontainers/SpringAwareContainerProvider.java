@@ -25,6 +25,9 @@ public abstract class SpringAwareContainerProvider<
 
   private static final Logger log = LoggerFactory.getLogger(SpringAwareContainerProvider.class);
 
+  private static boolean reuseContainerSupport =
+      TestcontainersConfiguration.getInstance().environmentSupportsReuse();
+
   /** The version of the container image to use. */
   protected String version;
 
@@ -43,12 +46,17 @@ public abstract class SpringAwareContainerProvider<
           enableContainerAnnotation.annotationType().getMethod("dockerImage");
       Method versionMethod = enableContainerAnnotation.annotationType().getMethod("version");
 
-      log.info("Initializing JDBC container with image {}:{}", dockerImage, version);
+      log.info("Initializing the container with image {}:{}", dockerImage, version);
       this.version = (String) versionMethod.invoke(enableContainerAnnotation);
       this.dockerImage = (String) dockerImageMethod.invoke(enableContainerAnnotation);
 
       container = createContainer();
-      container.withReuse(TestcontainersConfiguration.getInstance().environmentSupportsReuse());
+      container.withReuse(reuseContainerSupport);
+      log.info(
+          "Created the container with image {}:{} with reuse {}",
+          dockerImage,
+          version,
+          reuseContainerSupport);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
       throw new IllegalArgumentException(
           "Annotation "
@@ -74,7 +82,7 @@ public abstract class SpringAwareContainerProvider<
   /** Stops the container. This method is called when the Spring context is closed. */
   @Override
   public void stop() {
-    if (!TestcontainersConfiguration.getInstance().environmentSupportsReuse()) {
+    if (!reuseContainerSupport) {
       container.stop();
     }
   }

@@ -9,6 +9,8 @@ import io.flowinquiry.testcontainers.ai.EnableOllamaContainer;
 import io.flowinquiry.testcontainers.ai.OllamaOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.slf4j.Logger;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableOllamaContainer(
     dockerImage = "ollama/ollama",
     version = "0.9.0",
-    model = "smollm2:135m",
+    model = "llama3:latest",
     options = @OllamaOptions(temperature = "0.7", topP = "0.5"))
 @ActiveProfiles("test")
 public class OllamaDemoAppTest {
@@ -53,10 +55,13 @@ public class OllamaDemoAppTest {
     assertTrue(response.contains("Ollama Chat Controller is up and running"));
   }
 
-  @Test
-  public void testChatClient() {
+  @ParameterizedTest
+  @CsvSource({
+    "What is the result of 1+2? Give the value only, 3",
+    "How many letter 'r' in the word 'Hello'? Give the value only, 0"
+  })
+  public void testChatClient(String prompt, String expectedResult) {
     log.info("Testing chat client directly");
-    String prompt = "What is Spring AI?";
     log.info("Sending prompt: {}", prompt);
 
     String content = chatClient.prompt().user(prompt).call().content();
@@ -64,5 +69,7 @@ public class OllamaDemoAppTest {
     log.info("Received response: {}", content);
     assertNotNull(content);
     assertFalse(content.isEmpty());
+    assertTrue(
+        content.contains(expectedResult), "Response should contain '" + expectedResult + "'");
   }
 }

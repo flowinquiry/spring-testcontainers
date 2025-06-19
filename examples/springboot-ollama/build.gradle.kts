@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.bundles.spring.ai)
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.junit.platform.launcher)
     testImplementation(libs.spring.boot.starter.test)
 }
