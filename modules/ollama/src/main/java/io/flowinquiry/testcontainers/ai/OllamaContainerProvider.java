@@ -1,8 +1,10 @@
 package io.flowinquiry.testcontainers.ai;
 
 import static io.flowinquiry.testcontainers.ContainerType.OLLAMA;
+import static org.testcontainers.containers.BindMode.READ_WRITE;
 
 import io.flowinquiry.testcontainers.ContainerType;
+import io.flowinquiry.testcontainers.Slf4jOutputConsumer;
 import io.flowinquiry.testcontainers.SpringAwareContainerProvider;
 import java.io.IOException;
 import java.util.Properties;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
+import org.testcontainers.containers.Container;
 import org.testcontainers.ollama.OllamaContainer;
 
 /**
@@ -46,7 +49,8 @@ public class OllamaContainerProvider
    */
   @Override
   protected OllamaContainer createContainer() {
-    return new OllamaContainer(dockerImage + ":" + version);
+    return new OllamaContainer(dockerImage + ":" + version)
+        .withFileSystemBind("/tmp/ollama-cache", "/root/.ollama", READ_WRITE);
   }
 
   /**
@@ -60,11 +64,28 @@ public class OllamaContainerProvider
   @Override
   public void start() {
     super.start();
+
+    Logger containerLog = LoggerFactory.getLogger(OllamaContainerProvider.class);
+    container.followOutput(new Slf4jOutputConsumer(containerLog));
+
     try {
       log.info("Starting pull model {}", enableContainerAnnotation.model());
-      container.execInContainer("ollama", "pull", enableContainerAnnotation.model());
+      pullModelIfMissing(enableContainerAnnotation.model());
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  private void pullModelIfMissing(String modelName) throws IOException, InterruptedException {
+    Container.ExecResult result = container.execInContainer("ollama", "list");
+    String output = result.getStdout();
+
+    if (!output.contains(modelName)) {
+      log.info("Model '{}' not found in ollama cache. Pulling...", modelName);
+      Container.ExecResult pullResult = container.execInContainer("ollama", "pull", modelName);
+      log.info("Pull complete: {}", pullResult.getStdout());
+    } else {
+      log.info("Model '{}' already exists. Skipping pull.", modelName);
     }
   }
 
