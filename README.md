@@ -1,5 +1,8 @@
 # Spring-TestContainers
 
+[![Build Status](https://github.com/flowinquiry/spring-testcontainers/actions/workflows/gradle.yml/badge.svg)](https://github.com/flowinquiry/spring-testcontainers/actions/workflows/gradle.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.flowinquiry.testcontainers/spring-testcontainers?label=Maven%20Central)](https://search.maven.org/artifact/io.flowinquiry.testcontainers/spring-testcontainers)
+
 Spring-TestContainers is a Java library that makes it easier to write integration tests with Testcontainers, especially when you're using Spring or Spring Boot. It handles the setup and lifecycle of containers for you, so you can focus on testing—not boilerplate.
 
 We originally built this for FlowInquiry to make our own testing smoother. It worked so well, we decided to share it as a standalone library so other teams can take advantage of it too.
@@ -146,9 +149,9 @@ Add the core library along with the database module(s) you plan to use. Each dat
 
 ```kotlin
 // Add one or more of the following database modules
-testImplementation("io.flowinquiry.testcontainers:postgresql:0.9.1") // PostgreSQL support
-testImplementation("io.flowinquiry.testcontainers:mysql:0.9.1")      // MySQL support
-testImplementation("io.flowinquiry.testcontainers:ollama:0.9.1")     // Ollama support 
+testImplementation("io.flowinquiry.testcontainers:postgresql:<!-- Replace with the latest version -->") // PostgreSQL support
+testImplementation("io.flowinquiry.testcontainers:mysql:<!-- Replace with the latest version -->")      // MySQL support
+testImplementation("io.flowinquiry.testcontainers:ollama:<!-- Replace with the latest version -->")     // Ollama support 
 ```
 
 ### Maven
@@ -161,7 +164,7 @@ testImplementation("io.flowinquiry.testcontainers:ollama:0.9.1")     // Ollama s
 <dependency>
     <groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>postgresql</artifactId>
-    <version>0.9.0</version>
+    <version><!-- Replace with the latest version --></version>
     <scope>test</scope>
 </dependency>
 <dependency>
@@ -170,7 +173,7 @@ testImplementation("io.flowinquiry.testcontainers:ollama:0.9.1")     // Ollama s
 <dependency>
     <groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>mysql</artifactId>
-    <version>0.9.1</version>
+    <version><!-- Replace with the latest version --></version>
     <scope>test</scope>
 </dependency>
 
@@ -178,7 +181,7 @@ testImplementation("io.flowinquiry.testcontainers:ollama:0.9.1")     // Ollama s
 <dependency>
     <groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>ollama</artifactId>
-    <version>0.9.1</version>
+    <version><!-- Replace with the latest version --></version>
     <scope>test</scope>
 </dependency>
 ```
