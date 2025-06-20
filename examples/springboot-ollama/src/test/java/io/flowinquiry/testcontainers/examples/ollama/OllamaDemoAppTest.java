@@ -55,10 +55,18 @@ public class OllamaDemoAppTest {
     assertTrue(response.contains("Ollama Chat Controller is up and running"));
   }
 
+  @Test
+  public void testChatApi() {
+    String response = restTemplate.getForObject("/api/chat?message=What is 2+2?", String.class);
+    assertTrue(response.contains("4"));
+  }
+
   @ParameterizedTest
   @CsvSource({
-    "What is the result of 1+2? Give the value only, 3",
-    "How many letter 'r' in the word 'Hello'? Give the value only, 0"
+    "How many letter 'r' in the word 'Hello'? Give the value only, 0",
+    "What is 2+2?, 4",
+    "What is the capital of Japan?, Tokyo",
+    "Who wrote Romeo and Juliet?, Shakespeare"
   })
   public void testChatClient(String prompt, String expectedResult) {
     log.info("Testing chat client directly");

@@ -31,6 +31,10 @@ java {
     }
 }
 
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.add("-parameters")
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
