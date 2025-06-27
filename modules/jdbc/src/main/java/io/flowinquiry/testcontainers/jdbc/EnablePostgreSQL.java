@@ -48,7 +48,7 @@ import java.lang.annotation.Target;
 @Target({ANNOTATION_TYPE, TYPE})
 @Retention(RUNTIME)
 @Documented
-@EnableJdbcContainer(rdbms = POSTGRESQL)
+@EnableJdbcContainer(rdbms = ContainerType.POSTGRESQL)
 public @interface EnablePostgreSQL {
   /**
    * Specifies the version of the PostgreSQL Docker image to use.

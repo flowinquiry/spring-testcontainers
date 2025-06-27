@@ -4,6 +4,7 @@ import static io.flowinquiry.testcontainers.ServiceLoaderContainerFactory.getPro
 
 import io.flowinquiry.testcontainers.ContainerLifecycleExtension;
 import io.flowinquiry.testcontainers.ContainerType;
+import io.flowinquiry.testcontainers.ServiceLoaderContainerFactory;
 import io.flowinquiry.testcontainers.SpringAwareContainerProvider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -39,7 +40,7 @@ public class JdbcContainerExtension extends ContainerLifecycleExtension<EnableJd
   @Override
   protected SpringAwareContainerProvider<EnableJdbcContainer, ? extends GenericContainer<?>>
       initProvider(EnableJdbcContainer enableJdbcContainer) {
-    return getProvider(
+    return ServiceLoaderContainerFactory.getProvider(
         enableJdbcContainer,
         p -> p.getContainerType() == enableJdbcContainer.rdbms(),
         (prov, ann) -> prov.initContainerInstance(ann));

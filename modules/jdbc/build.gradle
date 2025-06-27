@@ -1,0 +1,16 @@
+plugins {
+    id("buildlogic.java-library-conventions")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api(project(":spring-testcontainers"))
+    api(libs.testcontainers.jdbc)
+}
+
+test {
+    useJUnitPlatform()
+}

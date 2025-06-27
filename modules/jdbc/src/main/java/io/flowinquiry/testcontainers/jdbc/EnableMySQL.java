@@ -1,6 +1,7 @@
 package io.flowinquiry.testcontainers.jdbc;
 
-import static io.flowinquiry.testcontainers.ContainerType.MYSQL;
+import io.flowinquiry.testcontainers.ContainerType;
+
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -12,7 +13,7 @@ import java.lang.annotation.Target;
 @Target({ANNOTATION_TYPE, TYPE})
 @Retention(RUNTIME)
 @Documented
-@EnableJdbcContainer(rdbms = MYSQL)
+@EnableJdbcContainer(rdbms = ContainerType.MYSQL)
 public @interface EnableMySQL {
   /**
    * Specifies the version of the MySQL Docker image to use.
