@@ -1,5 +1,14 @@
 package io.flowinquiry.testcontainers.kafka;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 /**
  * Annotation that enables and configures a Kafka container for integration testing. When applied to
  * a test class, this annotation triggers the creation and management of a Kafka container instance
@@ -14,6 +23,10 @@ package io.flowinquiry.testcontainers.kafka;
  * }
  * }</pre>
  */
+@Target({ANNOTATION_TYPE, TYPE})
+@Retention(RUNTIME)
+@Documented
+@ExtendWith(KafkaContainerExtension.class)
 public @interface EnableKafkaContainer {
 
   /**

@@ -10,9 +10,6 @@ dependencies {
     api(project(":spring-testcontainers"))
     implementation(platform(libs.spring.bom))
     implementation(libs.testcontainers.kafka)
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
-    testImplementation(libs.junit.platform.launcher)
 }
 
 test {

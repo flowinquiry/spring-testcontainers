@@ -24,11 +24,12 @@ Spring-TestContainers provides out-of-the-box support for the following containe
 
 Spring-TestContainers provides out-of-the-box support for the following containers. You can enable each one via a dedicated annotation in your test classes:
 
-| Container       | Annotation                        | Example Usage                                        | Notes                          |
-|----------------|-----------------------------------|-----------------------------------------------------|--------------------------------|
-| **PostgreSQL** | `@EnablePostgresContainer`        | `@EnablePostgresContainer(version = "15")`          | Uses `PostgreSQLContainer`     |
-| **MySQL**      | `@EnableMySQLContainer`           | `@EnableMySQLContainer(version = "8")`              | Uses `MySQLContainer`          |
-| **Ollama (AI)**| `@EnableOllamaContainer`          | `@EnableOllamaContainer(model = "llama2")`          | Starts Ollama with auto-pull   |
+| Container  | Annotation                 | Example Usage                              | Notes                        |
+|------------|----------------------------|--------------------------------------------|------------------------------|
+| **PostgreSQL** | `@EnablePostgresContainer` | `@EnablePostgresContainer(version = "15")` | Uses `PostgreSQLContainer`   |
+| **MySQL**  | `@EnableMySQLContainer`    | `@EnableMySQLContainer(version = "8")`     | Uses `MySQLContainer`        |
+| **Kafka**  | `@EnableKafkaContainer`    | `@EnableKafkaContainer(version = "3.9.1")` | Use `KafkaContainer`         |
+| **Ollama (AI)** | `@EnableOllamaContainer`   | `@EnableOllamaContainer(model = "llama2")` | Starts Ollama with auto-pull |
 
 
 ## Comparison: TestContainers with Spring vs Spring-TestContainers
@@ -152,6 +153,7 @@ Add the core library along with the database module(s) you plan to use. Each dat
 // Add one or more of the following database modules
 testImplementation("io.flowinquiry.testcontainers:postgresql:<!-- Replace with the latest version -->") // PostgreSQL support
 testImplementation("io.flowinquiry.testcontainers:mysql:<!-- Replace with the latest version -->")      // MySQL support
+testImplementation("io.flowinquiry.testcontainers:kafka:<!-- Replace with the latest version -->")
 testImplementation("io.flowinquiry.testcontainers:ollama:<!-- Replace with the latest version -->")     // Ollama support 
 ```
 
@@ -174,6 +176,14 @@ testImplementation("io.flowinquiry.testcontainers:ollama:<!-- Replace with the l
 <dependency>
     <groupId>io.flowinquiry.testcontainers</groupId>
     <artifactId>mysql</artifactId>
+    <version><!-- Replace with the latest version --></version>
+    <scope>test</scope>
+</dependency>
+
+<!-- Add this dependency to test Kafka -->
+<dependency>
+    <groupId>io.flowinquiry.testcontainers</groupId>
+    <artifactId>kafka</artifactId>
     <version><!-- Replace with the latest version --></version>
     <scope>test</scope>
 </dependency>
@@ -228,6 +238,7 @@ Currently, the following containers are supported:
 
 - PostgreSQL
 - MySQL
+- Kafka
 - Ollama
 
 ## Documentation
@@ -252,6 +263,12 @@ The project includes several example modules demonstrating how to use Spring-Tes
 * Manual configuration for container-based testing
 
 These examples provide a good starting point for integrating Spring-TestContainers into your own projects.
+
+### [springboot-kafka](examples/springboot-kafka)
+
+* Spring Boot applications having Kafka producer and consumer
+
+* Show how to integrate kafka container with minimal configuration
 
 ### [springboot-ollama](examples/springboot-ollama)
 

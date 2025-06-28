@@ -1,6 +1,8 @@
 package io.flowinquiry.testcontainers;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfigurationAttributes;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
@@ -19,6 +21,9 @@ import org.springframework.test.context.ContextCustomizerFactory;
  */
 public class ContainerContextCustomizerFactory implements ContextCustomizerFactory {
 
+  private static final Logger log =
+      LoggerFactory.getLogger(ContainerContextCustomizerFactory.class);
+
   /**
    * Creates a context customizer for the specified test class.
    *
@@ -36,7 +41,12 @@ public class ContainerContextCustomizerFactory implements ContextCustomizerFacto
       Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
     return (context, mergedConfig) -> {
       SpringAwareContainerProvider<?, ?> provider = ContainerRegistry.get(testClass);
-      provider.applyTo(context.getEnvironment());
+      if (provider != null) {
+        provider.applyTo(context.getEnvironment());
+      } else {
+        throw new IllegalStateException(
+            "Can not file the associate provider for test class " + testClass.getName());
+      }
     };
   }
 }
