@@ -11,9 +11,6 @@ dependencies {
     implementation(platform(libs.spring.bom))
     implementation(libs.testcontainers.ollama)
     implementation(libs.spring.context)
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
-    testImplementation(libs.junit.platform.launcher)
 }
 
 tasks.test {

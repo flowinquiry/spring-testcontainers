@@ -18,5 +18,8 @@ public enum ContainerType {
   MYSQL,
 
   /** Ollama Container */
-  OLLAMA;
+  OLLAMA,
+
+  /** Kafka Container */
+  KAFKA;
 }

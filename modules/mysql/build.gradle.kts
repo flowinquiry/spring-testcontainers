@@ -11,9 +11,6 @@ dependencies {
     implementation(platform(libs.spring.bom))
     implementation(libs.testcontainers.jdbc)
     implementation(libs.testcontainers.mysql)
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
-    testImplementation(libs.junit.platform.launcher)
 }
 
 tasks.test {
