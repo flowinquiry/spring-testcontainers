@@ -110,6 +110,6 @@ public class OllamaContainerProvider
 
     environment
         .getPropertySources()
-        .addFirst(new PropertiesPropertySource("testcontainers", props));
+        .addFirst(new PropertiesPropertySource("testcontainers.ollama", props));
   }
 }
