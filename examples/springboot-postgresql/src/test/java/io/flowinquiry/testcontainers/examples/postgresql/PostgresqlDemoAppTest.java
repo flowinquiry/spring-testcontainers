@@ -6,7 +6,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import io.flowinquiry.testcontainers.examples.postgresql.entity.Store;
 import io.flowinquiry.testcontainers.examples.postgresql.repository.StoreRepository;
-import io.flowinquiry.testcontainers.jdbc.EnablePostgreSQL;
+import io.flowinquiry.testcontainers.jdbc.postgresql.EnablePostgreSQL;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

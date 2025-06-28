@@ -1,11 +1,12 @@
-package io.flowinquiry.testcontainers.jdbc;
+package io.flowinquiry.testcontainers.jdbc.postgresql;
 
-import static io.flowinquiry.testcontainers.ContainerType.POSTGRESQL;
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import io.flowinquiry.testcontainers.ContainerType;
+import io.flowinquiry.testcontainers.jdbc.EnableJdbcContainer;
+import io.flowinquiry.testcontainers.jdbc.JdbcContainerExtension;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -48,7 +49,7 @@ import java.lang.annotation.Target;
 @Target({ANNOTATION_TYPE, TYPE})
 @Retention(RUNTIME)
 @Documented
-@EnableJdbcContainer(rdbms = POSTGRESQL)
+@EnableJdbcContainer(rdbms = ContainerType.POSTGRESQL)
 public @interface EnablePostgreSQL {
   /**
    * Specifies the version of the PostgreSQL Docker image to use.
