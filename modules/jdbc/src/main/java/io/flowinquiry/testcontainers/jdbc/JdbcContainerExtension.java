@@ -1,7 +1,5 @@
 package io.flowinquiry.testcontainers.jdbc;
 
-import static io.flowinquiry.testcontainers.ServiceLoaderContainerFactory.getProvider;
-
 import io.flowinquiry.testcontainers.ContainerLifecycleExtension;
 import io.flowinquiry.testcontainers.ContainerType;
 import io.flowinquiry.testcontainers.ServiceLoaderContainerFactory;

@@ -1,11 +1,11 @@
-package io.flowinquiry.testcontainers.jdbc;
-
-import io.flowinquiry.testcontainers.ContainerType;
+package io.flowinquiry.testcontainers.jdbc.mysql;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import io.flowinquiry.testcontainers.ContainerType;
+import io.flowinquiry.testcontainers.jdbc.EnableJdbcContainer;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

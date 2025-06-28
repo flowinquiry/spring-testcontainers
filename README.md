@@ -102,7 +102,7 @@ class PostgresSpringTest {
 ### Example 2: Using Spring-TestContainers
 
 ```java
-import io.flowinquiry.testcontainers.jdbc.EnablePostgreSQL;
+import io.flowinquiry.testcontainers.jdbc.postgresql.EnablePostgreSQL;
 import org.junit.jupiter.api.Test;
 
 @ExtendWith(SpringExtension.class)

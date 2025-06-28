@@ -6,7 +6,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import io.flowinquiry.testcontainers.examples.mysql.entity.Store;
 import io.flowinquiry.testcontainers.examples.mysql.repository.StoreRepository;
-import io.flowinquiry.testcontainers.jdbc.EnableMySQL;
+import io.flowinquiry.testcontainers.jdbc.mysql.EnableMySQL;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

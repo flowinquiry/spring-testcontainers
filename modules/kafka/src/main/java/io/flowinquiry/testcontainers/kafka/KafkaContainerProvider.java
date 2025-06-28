@@ -1,4 +1,3 @@
 package io.flowinquiry.testcontainers.kafka;
 
-public class KafkaContainerProvider {
-}
+public class KafkaContainerProvider {}
